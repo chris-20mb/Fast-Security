@@ -10,6 +10,8 @@ python = "^3.12"
 fastapi = "*"
 python-multipart = "^0.0.18"
 uvicorn = {extras = ["standard"], version = "^0.32.1"}
+pyjwt = "^2.10.1"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]
