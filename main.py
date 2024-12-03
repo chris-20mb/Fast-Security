@@ -2,6 +2,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import jwt
+from data import create_db_and_tables
+
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
@@ -51,6 +53,12 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI()
+
+
+#criar tabelas do banco de dados na inicialização
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
 
 
 def verify_password(plain_password, hashed_password):
