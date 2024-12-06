@@ -2,14 +2,20 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import jwt
-from data import create_db_and_tables
+from data import create_db_and_tables, Conta, SessionDep
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, Query
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+from typing import Union
 
+
+
+
+#CÓDIGO DE AUTENTICAÇÃO!!!!!!------------------------------------
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
@@ -153,3 +159,18 @@ async def read_own_items(
     current_user: Annotated[User, Depends(get_current_active_user)],
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
+
+
+#FIM DO CÓDIGO DE AUTENTICAÇÃO---------------------------------
+#-----------CONTA
+
+class ContaBancaria(BaseModel):
+    id: int
+    titular: Union[str, None] = None
+    numero: str
+    saldo: Union[float, None] = None
+
+
+@app.post("/conta/")
+def create_item(conta: ContaBancaria):
+    return conta
